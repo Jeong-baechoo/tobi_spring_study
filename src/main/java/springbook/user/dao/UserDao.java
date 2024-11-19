@@ -6,19 +6,26 @@ import java.sql.*;
 
 public class UserDao {
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao dao = new UserDao();
-        User user = new User();
+//    private final SimpleConnectionMaker simpleConnectionMaker;
+    private final ConnectionMaker connectionMaker;
 
+    public UserDao() {
+        connectionMaker = new DConnectionMaker(); // 생성자에서 객체를 생성 -> DConnectionMaker 클래스에 대한 의존성이 생김
+    }
+
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+        UserDao userDao = new UserDao();
+
+        User user = new User();
         user.setId("whiteship");
         user.setName("백기선");
         user.setPassword("married");
 
-        dao.add(user);
+        userDao.add(user);
 
         System.out.println(user.getId() + " 등록 성공");
 
-        User user2 = dao.get(user.getId());
+        User user2 = userDao.get(user.getId());
         System.out.println(user2.getName());
         System.out.println(user2.getPassword());
 
@@ -26,9 +33,7 @@ public class UserDao {
     }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-
-        Class.forName("org.postgresql.Driver");
-        Connection c = DriverManager.getConnection("jdbc:postgresql://localhost/spring_study", "postgres", "1234");
+        Connection c = connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
         ps.setString(1, user.getId());
@@ -42,8 +47,7 @@ public class UserDao {
     }
 
     public User get(String id) throws ClassNotFoundException, SQLException {
-        Class.forName("org.postgresql.Driver");
-        Connection c = DriverManager.getConnection("jdbc:postgresql://localhost/spring_study", "postgres", "1234"); // DB 연결
+        Connection c = connectionMaker.makeConnection();
 
         PreparedStatement ps = c.prepareStatement("select * from users where id = ?"); // 쿼리 준비
         ps.setString(1, id);
@@ -60,4 +64,21 @@ public class UserDao {
         c.close();
         return user;
     }
+
+//    // 템플릿 메소드 패턴을 적용한 getConnection() 메소드
+//    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
+//
+//    public class NUserDao extends UserDao {
+//        public Connection getConnection() throws ClassNotFoundException, SQLException {
+//            // N사 DB connection 생성코드
+//            return null;
+//        }
+//    }
+//
+//    public class DUserDao extends UserDao {
+//        public Connection getConnection() throws ClassNotFoundException, SQLException {
+//            // D사 DB connection 생성코드
+//            return null;
+//        }
+//    }
 }
