@@ -6,31 +6,12 @@ import java.sql.*;
 
 public class UserDao {
 
-//    private final SimpleConnectionMaker simpleConnectionMaker;
     private final ConnectionMaker connectionMaker;
 
-    public UserDao() {
-        connectionMaker = new DConnectionMaker(); // 생성자에서 객체를 생성 -> DConnectionMaker 클래스에 대한 의존성이 생김
+    public UserDao(ConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker; // 생성자를 통해 ConnectionMaker 타입의 오브젝트를 전달받음
     }
 
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
-        UserDao userDao = new UserDao();
-
-        User user = new User();
-        user.setId("whiteship");
-        user.setName("백기선");
-        user.setPassword("married");
-
-        userDao.add(user);
-
-        System.out.println(user.getId() + " 등록 성공");
-
-        User user2 = userDao.get(user.getId());
-        System.out.println(user2.getName());
-        System.out.println(user2.getPassword());
-
-        System.out.println(user2.getId() + " 조회 성공");
-    }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
         Connection c = connectionMaker.makeConnection();
