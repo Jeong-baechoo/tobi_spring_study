@@ -1,11 +1,10 @@
 package springbook.user.dao;
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserDaoTest {
 
@@ -20,7 +19,11 @@ class UserDaoTest {
 //        ConnectionMaker connectionMaker = new DConnectionMaker();
 //        UserDao userDao = new UserDao(connectionMaker);
 
-        UserDao userDao = new DaoFactory().userDao(); // DaoFactory를 사용하여 UserDao 오브젝트를 생성한다.
+//        UserDao userDao = new DaoFactory().userDao(); // DaoFactory를 사용하여 UserDao 오브젝트를 생성한다.
+
+
+        ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);// DaoFactory를 사용하여 UserDao 오브젝트를 생성한다.
+        UserDao userDao = context.getBean("userDao", UserDao.class);
 
         User user = new User();
         user.setId("whiteship");
