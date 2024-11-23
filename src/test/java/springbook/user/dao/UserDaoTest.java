@@ -14,8 +14,9 @@ class UserDaoTest {
      * UserDAo를 테스트할 책임,
      * */
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
-
-        ConnectionMaker connectionMaker = new DConnectionMaker(); // 전략 패턴을 사용하여 ConnectionMaker 구현 클래스를 결정하고 오브젝트를 만든다.
+        // 전략 패턴을 사용하여 ConnectionMaker 구현 클래스를 결정하고 오브젝트를 만든다.
+        // 그러나 이 방법은 UserDao의 클라이언트인 main() 메소드가 ConnectionMaker 구현 클래스를 결정하고 오브젝트를 만드는 책임을 짊어진다.
+        ConnectionMaker connectionMaker = new DConnectionMaker();
         UserDao userDao = new UserDao(connectionMaker);
 
         User user = new User();
