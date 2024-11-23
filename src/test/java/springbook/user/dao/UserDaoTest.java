@@ -1,5 +1,6 @@
 package springbook.user.dao;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import springbook.user.domain.User;
 
 import java.sql.SQLException;
@@ -16,8 +17,10 @@ class UserDaoTest {
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
         // 전략 패턴을 사용하여 ConnectionMaker 구현 클래스를 결정하고 오브젝트를 만든다.
         // 그러나 이 방법은 UserDao의 클라이언트인 main() 메소드가 ConnectionMaker 구현 클래스를 결정하고 오브젝트를 만드는 책임을 짊어진다.
-        ConnectionMaker connectionMaker = new DConnectionMaker();
-        UserDao userDao = new UserDao(connectionMaker);
+//        ConnectionMaker connectionMaker = new DConnectionMaker();
+//        UserDao userDao = new UserDao(connectionMaker);
+
+        UserDao userDao = new DaoFactory().userDao(); // DaoFactory를 사용하여 UserDao 오브젝트를 생성한다.
 
         User user = new User();
         user.setId("whiteship");
